@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         colorScheme: AppTheme.lightColorScheme,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: const EdgeInsets.symmetric(vertical: 12),
             backgroundColor: AppColor.primary400,
             foregroundColor: AppColor.light,
             textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -40,6 +40,11 @@ class MyApp extends StatelessWidget {
               letterSpacing: 1.25
             )
           )
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+          border: OutlineInputBorder(borderSide: BorderSide.none),
+          filled: false
         )
       ),
       darkTheme: ThemeData.dark(useMaterial3: true).copyWith(

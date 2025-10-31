@@ -1,7 +1,8 @@
+import 'package:builder_bloc_template/core/constants/app_color.dart';
 import 'package:flutter/material.dart';
 
-class BuilderTextFormField extends StatefulWidget {
-  const BuilderTextFormField({
+class CustomTFField extends StatefulWidget {
+  const CustomTFField({
     super.key,
     required this.controller,
     this.obscureText = false,
@@ -13,10 +14,10 @@ class BuilderTextFormField extends StatefulWidget {
   final String? hintText;
 
   @override
-  State<BuilderTextFormField> createState() => _BuilderTextFormFieldState();
+  State<CustomTFField> createState() => _CustomTFFieldState();
 }
 
-class _BuilderTextFormFieldState extends State<BuilderTextFormField> {
+class _CustomTFFieldState extends State<CustomTFField> {
   late FocusNode _focusNode;
 
   @override
@@ -46,8 +47,8 @@ class _BuilderTextFormFieldState extends State<BuilderTextFormField> {
         border: _focusNode.hasFocus
           ? Border.all(width: 0.8, color: Theme.of(context).colorScheme.primary)
           : null,
-        color: Colors.blueGrey.shade100,
-        borderRadius: const BorderRadius.all(Radius.circular(40))
+        color: AppColor.primary100,
+        borderRadius: const BorderRadius.all(Radius.circular(50))
       ),
       duration: const Duration(milliseconds: 100),
       child: TextFormField(
@@ -61,8 +62,6 @@ class _BuilderTextFormFieldState extends State<BuilderTextFormField> {
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: TextStyle(color: Colors.blueGrey.shade300),
-          border: const OutlineInputBorder(borderSide: BorderSide.none),
-          filled: false
         ),
       ),
     );

@@ -6,11 +6,13 @@ class AppTheme {
   static final lightColorScheme = const ColorScheme.light().copyWith(
     primary: AppColor.primary,
     secondary: AppColor.secondary,
+    primaryContainer: AppColor.primary100,
     tertiary: AppColor.tertiary
   );
   static final darkColorScheme = const ColorScheme.dark().copyWith(
-    primary: AppColor.secondary,
-    secondary: AppColor.primary,
+    primary: AppColor.primary,
+    secondary: AppColor.secondary,
+    primaryContainer: AppColor.primary900,
     tertiary: const Color(0xFF74FEAC)
   );
 }

@@ -17,6 +17,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   late final AnimationController _animationController;
   late final Animation<Offset> _animationOffset;
+  bool _isRemember = false;
 
   @override
   void initState() {
@@ -110,27 +111,57 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   Widget _buildFormLogin() => Form(
     key: _formKey,
     child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text("Login"),
-          BuilderTextFormField(
+          CustomTFField(
             controller: _emailController,
             hintText: "Email",
           ),
           const SizedBox(height: 16),
-          BuilderTextFormField(
+          CustomTFField(
             controller: _pwdController,
             hintText: "Password",
             obscureText: true,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
+          _buildRememberMe(),
+          const SizedBox(height: 10),
           _buildButtonLogin(),
         ],
       ),
     ),
   );
+
+  void onChanged(bool? value) {
+    print("value $value");
+    setState(() {
+      _isRemember = value!;
+    });
+  }
+
+  Widget _buildRememberMe() {
+    // return CustomCBWidget(
+    //   text: "Remember Me",
+    //   onChanged: onChanged,
+    //   value: isRemember,
+    // );
+    return CheckboxListTile(
+      value: _isRemember,
+      onChanged: onChanged,
+      contentPadding: EdgeInsets.zero,
+      title: const Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text("Remember me"),
+        ],
+      ),
+      
+      
+    );
+  }
 
   Widget _buildButtonLogin() {
     return SizedBox(

@@ -23,7 +23,12 @@ class _CustomCBWidgetState extends State<CustomCBWidget> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(widget.text),
+        GestureDetector(
+          onTap: () {
+            widget.onChanged!(!widget.value);
+          },
+          child: Text(widget.text)
+        ),
         Checkbox(
           value: widget.value,
           checkColor: AppColor.secondary,

@@ -19,10 +19,12 @@ class CustomTFField extends StatefulWidget {
 
 class _CustomTFFieldState extends State<CustomTFField> {
   late FocusNode _focusNode;
+  late bool _obscureText;
 
   @override
   void initState() {
     super.initState();
+    _obscureText = widget.obscureText;
     _focusNode = FocusNode();
     _focusNode.addListener(_onFocusChange);
   }
@@ -57,11 +59,18 @@ class _CustomTFFieldState extends State<CustomTFField> {
         onTapOutside: (e) {
           FocusScope.of(context).unfocus();
         },
-        obscureText: widget.obscureText,
+        obscureText: _obscureText,
         cursorColor: Theme.of(context).colorScheme.secondary,
         decoration: InputDecoration(
           hintText: widget.hintText,
-          hintStyle: TextStyle(color: Colors.blueGrey.shade300),
+          suffixIcon: widget.obscureText ? IconButton(
+            onPressed: () {
+              setState(() {
+                _obscureText = !_obscureText;
+              });
+            },
+            icon: Icon(_obscureText ? Icons.visibility : Icons.visibility_off)
+          ) : null
         ),
       ),
     );

@@ -1,27 +1,27 @@
 import 'package:builder_bloc_template/core/config/router.dart';
-import 'package:builder_bloc_template/core/di/service_locator.config.dart';
+import 'package:builder_bloc_template/data/datasources/auth_datasource.dart';
+import 'package:builder_bloc_template/data/repositories/auth_repository.dart';
+import 'package:builder_bloc_template/domain/repositories/auth_repository.dart';
+import 'package:builder_bloc_template/domain/usecases/auth_usecase.dart';
+import 'package:builder_bloc_template/firebase_options.dart';
+import 'package:builder_bloc_template/presentation/views/auth/bloc/auth_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:injectable/injectable.dart';
 
 final sl = GetIt.instance;
 
-@InjectableInit()
-void configureDependencies() => sl.init();
+void serviceLocatorSetup() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
 
-@module
-abstract class FirebaseInjectableModule {
-  @lazySingleton
-  FirebaseAuth get firebaseAuth => FirebaseAuth.instance;
+  sl.registerLazySingleton(() => AppRouter());
+  sl.registerLazySingleton(() => FirebaseAuth.instance);
+  sl.registerFactory(() => AuthBloc(useCase: sl()));
+  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
+  sl.registerLazySingleton(() => AuthUseCase(authRepository: sl()));
+  sl.registerLazySingleton<AuthDatasource>(() => AuthDatasourceImpl(sl()));
 }
-
-@module
-abstract class ApplicationRouterModule {
-  @singleton
-  AppRouter get router => AppRouter();
-}
-
-// void serviceLocatorSetup() {
-//   sl.registerLazySingleton(() => AppRouter());
-//   sl.registerLazySingleton(() => FirebaseAuth.instance);
-// }

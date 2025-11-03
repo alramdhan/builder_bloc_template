@@ -2,18 +2,11 @@ import 'package:builder_bloc_template/core/config/router/app_router.dart';
 import 'package:builder_bloc_template/core/constants/app_color.dart';
 import 'package:builder_bloc_template/core/di/service_locator.dart';
 import 'package:builder_bloc_template/core/themes/app_theme.dart';
-import 'package:builder_bloc_template/firebase_options.dart';
-import 'package:builder_bloc_template/presentation/pages/auth/login_page.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:builder_bloc_template/presentation/views/auth/login_page.dart';
 import 'package:flutter/material.dart';
 
-void main() async {
-  // serviceLocatorSetup();
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  configureDependencies();
+void main() {
+  serviceLocatorSetup();
   runApp(const MyApp());
 }
 
@@ -23,11 +16,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    const String fontFamily = "Montserrat";
     return MaterialApp(
       title: 'Flutter Demo',
       navigatorKey: sl<AppRouter>().navigatorKey,
       themeMode: ThemeMode.system,
-      theme: ThemeData.light(useMaterial3: true).copyWith(
+      theme: ThemeData(fontFamily: fontFamily).copyWith(
+        brightness: Brightness.light,
         colorScheme: AppTheme.lightColorScheme,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -41,14 +36,16 @@ class MyApp extends StatelessWidget {
             )
           )
         ),
-        inputDecorationTheme: const InputDecorationTheme(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-          border: OutlineInputBorder(borderSide: BorderSide.none),
-          filled: false
+        inputDecorationTheme: InputDecorationTheme(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 14),
+          border: const OutlineInputBorder(borderSide: BorderSide.none),
+          hintStyle: TextStyle(color: Colors.blueGrey.shade300),
+          filled: false,
         )
       ),
-      darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
-        colorScheme: AppTheme.darkColorScheme
+      darkTheme: ThemeData(fontFamily: fontFamily).copyWith(
+        brightness: Brightness.dark,
+        colorScheme: AppTheme.darkColorScheme,
       ),
       home: const LoginPage(),
     );

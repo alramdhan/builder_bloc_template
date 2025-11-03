@@ -42,7 +42,6 @@ dependencies:
   json_annotation: ^4.9.0
   firebase_core: ^4.2.0
   firebase_auth: ^6.1.1
-  injectable: ^2.5.1
 
 dev_dependencies:
   flutter_test:
@@ -52,7 +51,6 @@ dev_dependencies:
   rename_app: ^1.6.5
   json_serializable: ^6.8.0
   build_runner: ^2.4.9
-  injectable_generator: 2.6.1
   flutter_native_splash: ^2.4.4
   flutter_launcher_icons: ^0.14.4
 
@@ -96,10 +94,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: fonts/Montserrat/Montserrat-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

@@ -7,6 +7,7 @@ abstract class AuthState extends Equatable {
   List<Object?> get props => [];
 }
 
+// state sign in
 class SigninInitial extends AuthState {}
 
 class SigninLoading extends AuthState {}
@@ -21,10 +22,33 @@ class SigninSuccess extends AuthState {
 }
 
 class SigninFailure extends AuthState {
-  final String message;
+  final FailureResponse error;
 
-  const SigninFailure(this.message);
+  const SigninFailure(this.error);
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [error];
+}
+
+// state sign up
+class SignupInitial extends AuthState {}
+
+class SignupLoading extends AuthState {}
+
+class SignupSuccess extends AuthState {
+  final UserEntity user;
+
+  const SignupSuccess({required this.user});
+
+  @override
+  List<Object?> get props => [user];
+}
+
+class SignupFailure extends AuthState {
+  final FailureResponse error;
+
+  const SignupFailure(this.error);
+
+  @override
+  List<Object?> get props => [error];
 }

@@ -1,7 +1,9 @@
-import 'package:builder_bloc_template/core/config/error/failure.dart';
+import 'package:builder_bloc_template/core/config/router.dart';
 import 'package:builder_bloc_template/core/constants/app_color.dart';
 import 'package:builder_bloc_template/core/di/service_locator.dart';
+import 'package:builder_bloc_template/data/models/base_response.dart';
 import 'package:builder_bloc_template/presentation/views/auth/bloc/auth_bloc.dart';
+import 'package:builder_bloc_template/presentation/views/auth/register_page.dart';
 import 'package:builder_bloc_template/presentation/widgets/forms/check_box.dart';
 import 'package:builder_bloc_template/presentation/widgets/forms/text_field.dart';
 import 'package:flutter/material.dart';
@@ -26,22 +28,26 @@ class LoginView extends StatefulWidget {
   State<LoginView> createState() => _LoginViewState();
 }
 
-class _LoginViewState extends State<LoginView> with SingleTickerProviderStateMixin {
-  final GlobalKey<FormState> _formKey = GlobalKey();
+class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _pwdController = TextEditingController();
-  String _email = '';
-  String _password = '';
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   late final AnimationController _animationController;
+  late final AnimationController _animRegisController;
   late final Animation<Offset> _animationOffset;
+  late final Animation<Offset> _animRegisOffset;
   bool _isRemember = false;
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this
+    );
+    _animRegisController = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this
     );
@@ -52,10 +58,23 @@ class _LoginViewState extends State<LoginView> with SingleTickerProviderStateMix
       parent: _animationController,
       curve: Curves.fastOutSlowIn
     ));
+    _animRegisOffset = Tween<Offset>(
+      begin: const Offset(0, -3),
+      end: Offset.zero
+    ).animate(CurvedAnimation(
+      parent: _animRegisController,
+      curve: Curves.easeInOutBack
+    ));
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(milliseconds: 1200), () {
       _animationController.forward();
-      print("animateion status ${_animationController.status}");
+      _animationController.addListener(() {
+        print("animateion status ${_animationOffset.isCompleted}");
+        setState(() {});
+        if(_animationOffset.isCompleted) {
+          _animRegisController.forward();
+        }
+      });
     });
   }
 
@@ -68,9 +87,11 @@ class _LoginViewState extends State<LoginView> with SingleTickerProviderStateMix
   }
 
   Future _doLogin() async {
-    context.read<AuthBloc>().add(
-      SigninSubmitted(email: _email, password: _password)
-    );
+    if(_formKey.currentState!.validate()) {
+      context.read<AuthBloc>().add(
+        SigninSubmitted(email: _emailController.text, password: _pwdController.text)
+      );
+    }
   }
 
   @override
@@ -81,7 +102,8 @@ class _LoginViewState extends State<LoginView> with SingleTickerProviderStateMix
       key: _scaffoldKey,
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
-          if(state is Failure) {
+          if(state is FailureResponse) {
+            print("state, ${state}");
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
@@ -93,8 +115,9 @@ class _LoginViewState extends State<LoginView> with SingleTickerProviderStateMix
           return Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
+                tileMode: TileMode.mirror,
                 begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+                end: Alignment.centerRight,
                 colors: [
                   AppColor.primary,
                   AppColor.primary400
@@ -104,45 +127,18 @@ class _LoginViewState extends State<LoginView> with SingleTickerProviderStateMix
             child: Stack(
               children: [
                 Positioned(
-                  top: MediaQuery.sizeOf(context).height * .1,
+                  top: MediaQuery.paddingOf(context).top,
+                  left: 0,
+                  right: 0,
+                  child: _buildRegisterContent()
+                ),
+                Positioned(
+                  top: size.height * .16,
                   left: 0,
                   right: 0,
                   child: _buildLogoApp(),
                 ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: SlideTransition(
-                    position: _animationOffset,
-                    child: Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: Card(
-                            color: Colors.white54,
-                            child: SizedBox(
-                              width: size.width - 40,
-                              height: size.height * .75
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          child: Card(
-                            margin: EdgeInsets.zero,
-                            color: Colors.white,
-                            child: SizedBox(
-                              width: size.width,
-                              height: size.height * .738,
-                              child: _buildFormLogin()
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
+                _buildCardForm(size, state)
               ],
             ),
           );
@@ -151,22 +147,93 @@ class _LoginViewState extends State<LoginView> with SingleTickerProviderStateMix
     );
   }
 
+  Widget _buildRegisterContent() => SlideTransition(
+    position: _animRegisOffset,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Doesn't have an account?",
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: AppColor.secondary
+            ),
+          ),
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: AppColor.secondary)
+            ),
+            onPressed: () {
+              sl<AppRouter>().push(const RegisterPage());
+            },
+            child: const Text('Sign Up',
+              style: TextStyle(
+                fontSize: 16,
+                color: AppColor.light
+              ),
+            )
+          )
+        ],
+      ),
+    ),
+  );
+
   Widget _buildLogoApp() {
-    return Column(
-      children: [
-        const FlutterLogo(size: 80),
-        const SizedBox(height: 6),
-        Text("Flutter Template Builder",
+    return AnimatedOpacity(
+      opacity: _animationOffset.isCompleted ? 1 : 0,
+      duration: const Duration(seconds: 1),
+      child: Center(
+        child: Text("App Name",
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
             color: AppColor.light
           )
-        )
-      ],
+        ),
+      ),
     );
   }
 
-  Widget _buildFormLogin() {
-    final line = Expanded(child: Divider(color: Colors.blueGrey.shade300));
+  Widget _buildCardForm(Size size, AuthState state) {
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: SlideTransition(
+        position: _animationOffset,
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: Card(
+                color: Colors.white38,
+                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
+                child: SizedBox(
+                  width: size.width - 40,
+                  height: size.height * .75
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              child: Card(
+                margin: EdgeInsets.zero,
+                color: Colors.white,
+                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(25))),
+                child: SizedBox(
+                  width: size.width,
+                  height: size.height * .738,
+                  child: _buildFormLogin(state)
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFormLogin(AuthState state) {
+    final line = Expanded(child: Divider(color: Colors.blueGrey.shade200));
     return Form(
       key: _formKey,
       child: Padding(
@@ -177,7 +244,7 @@ class _LoginViewState extends State<LoginView> with SingleTickerProviderStateMix
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("APP Title",
+                Text("Welcome Back",
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                     
                   ),
@@ -201,14 +268,16 @@ class _LoginViewState extends State<LoginView> with SingleTickerProviderStateMix
             const SizedBox(height: 10),
             _buildRememberMe(),
             const SizedBox(height: 10),
-            _buildButtonLogin(),
+            _buildButtonLogin(state),
             const SizedBox(height: 32),
             Row(
               children: [
                 line,
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text("or sign in with"),
+                  child: Text("or sign in with",
+                    style: TextStyle(color: Colors.blueGrey),
+                  ),
                 ),
                 line,
               ],
@@ -250,12 +319,18 @@ class _LoginViewState extends State<LoginView> with SingleTickerProviderStateMix
     // );
   }
 
-  Widget _buildButtonLogin() {
+  Widget _buildButtonLogin(AuthState state) {
     return SizedBox(
       width: MediaQuery.sizeOf(context).width,
       child: ElevatedButton(
         onPressed: _doLogin,
-        child: const Text("Sign In")
+        child: state is SigninLoading
+          ? const SizedBox.square(
+            dimension: 26,
+            child: CircularProgressIndicator(
+              color: Colors.white
+            ),
+          ) : const Text("Sign In")
       ),
     );
   }

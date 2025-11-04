@@ -5,13 +5,27 @@ import 'package:builder_bloc_template/core/themes/app_theme.dart';
 import 'package:builder_bloc_template/presentation/views/auth/login_page.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
   serviceLocatorSetup();
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late final AppRouter _appRouter;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _appRouter = sl<AppRouter>();
+    super.initState();
+  }
 
   // This widget is the root of your application.
   @override
@@ -19,7 +33,7 @@ class MyApp extends StatelessWidget {
     const String fontFamily = "Montserrat";
     return MaterialApp(
       title: 'Flutter Demo',
-      navigatorKey: sl<AppRouter>().navigatorKey,
+      navigatorKey: _appRouter.navigatorKey,
       themeMode: ThemeMode.system,
       theme: ThemeData(fontFamily: fontFamily).copyWith(
         brightness: Brightness.light,

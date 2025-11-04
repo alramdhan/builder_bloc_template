@@ -6,12 +6,14 @@ class CustomTFField extends StatefulWidget {
     super.key,
     required this.controller,
     this.obscureText = false,
-    this.hintText
+    this.onFieldSubmitted,
+    this.hintText,
   });
 
   final TextEditingController controller;
   final bool obscureText;
   final String? hintText;
+  final void Function(String)? onFieldSubmitted;
 
   @override
   State<CustomTFField> createState() => _CustomTFFieldState();
@@ -59,6 +61,14 @@ class _CustomTFFieldState extends State<CustomTFField> {
         onTapOutside: (e) {
           FocusScope.of(context).unfocus();
         },
+        onFieldSubmitted: widget.onFieldSubmitted,
+        validator: (value) {
+          if(value == null || value.isEmpty) {
+            return "Field tidak boleh kosong";
+          }
+
+          return null;
+        },
         obscureText: _obscureText,
         cursorColor: Theme.of(context).colorScheme.secondary,
         decoration: InputDecoration(
@@ -70,7 +80,7 @@ class _CustomTFFieldState extends State<CustomTFField> {
               });
             },
             icon: Icon(_obscureText ? Icons.visibility : Icons.visibility_off)
-          ) : null
+          ) : null,
         ),
       ),
     );

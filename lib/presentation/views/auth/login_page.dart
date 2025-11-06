@@ -1,7 +1,6 @@
 import 'package:builder_bloc_template/core/config/router.dart';
 import 'package:builder_bloc_template/core/constants/app_color.dart';
 import 'package:builder_bloc_template/core/di/service_locator.dart';
-import 'package:builder_bloc_template/data/models/base_response.dart';
 import 'package:builder_bloc_template/presentation/views/auth/bloc/auth_bloc.dart';
 import 'package:builder_bloc_template/presentation/views/auth/register_page.dart';
 import 'package:builder_bloc_template/presentation/widgets/forms/check_box.dart';
@@ -102,12 +101,11 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
       key: _scaffoldKey,
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
-          if(state is FailureResponse) {
-            print("state, ${state}");
+          if(state is SigninFailure) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
-                SnackBar(content: Text("Error"))
+                SnackBar(content: Text(state.error.message))
               );
           }
         },

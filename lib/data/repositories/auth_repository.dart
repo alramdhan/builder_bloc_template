@@ -16,7 +16,7 @@ class AuthRepositoryImpl extends AuthRepository {
 
       return SuccessResponse(userModel);
     } on ServerException {
-      return const FailureResponse(ErrorResponse(statusCode: 500, message: "Error"));
+      return const FailureResponse(statusCode: 500, message: "Error");
     }
   }
   
@@ -27,7 +27,7 @@ class AuthRepositoryImpl extends AuthRepository {
 
       return SuccessResponse(userModel);
     } on ServerException {
-      return const FailureResponse(ErrorResponse(statusCode: 500, message: "Error"));
+      return const FailureResponse(statusCode: 500, message: "Error");
     }
   }
 }

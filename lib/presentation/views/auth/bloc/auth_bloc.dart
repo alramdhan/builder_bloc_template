@@ -21,8 +21,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(SigninLoading());
 
     final result = await useCase(event.email, event.password);
-
-    print("res ${result}");
+    if(result.success) {
+      emit(SigninSuccess(user: result.response!));
+    } else {
+      emit(SigninFailure(result as FailureResponse));
+    }
+    
     emit(SigninInitial());
   }
 

@@ -2,30 +2,22 @@ import 'package:builder_bloc_template/core/config/router/app_router.dart';
 import 'package:builder_bloc_template/core/constants/app_color.dart';
 import 'package:builder_bloc_template/core/di/service_locator.dart';
 import 'package:builder_bloc_template/core/themes/app_theme.dart';
+import 'package:builder_bloc_template/firebase_options.dart';
 import 'package:builder_bloc_template/presentation/views/auth/login_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
   serviceLocatorSetup();
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  late final AppRouter _appRouter;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    _appRouter = sl<AppRouter>();
-    super.initState();
-  }
 
   // This widget is the root of your application.
   @override
@@ -33,7 +25,7 @@ class _MyAppState extends State<MyApp> {
     const String fontFamily = "Montserrat";
     return MaterialApp(
       title: 'Flutter Demo',
-      navigatorKey: _appRouter.navigatorKey,
+      navigatorKey: sl<AppRouter>().navigatorKey,
       themeMode: ThemeMode.system,
       theme: ThemeData(fontFamily: fontFamily).copyWith(
         brightness: Brightness.light,

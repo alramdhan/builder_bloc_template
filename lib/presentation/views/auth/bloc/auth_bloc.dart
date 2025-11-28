@@ -19,6 +19,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit
   ) async {
     emit(SigninLoading());
+    await Future.delayed(const Duration(milliseconds: 500));
 
     final result = await useCase(event.email, event.password);
     if(result.success) {

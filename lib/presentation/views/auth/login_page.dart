@@ -3,10 +3,13 @@ import 'package:builder_bloc_template/core/constants/app_color.dart';
 import 'package:builder_bloc_template/core/di/service_locator.dart';
 import 'package:builder_bloc_template/presentation/views/auth/bloc/auth_bloc.dart';
 import 'package:builder_bloc_template/presentation/views/auth/register_page.dart';
+import 'package:builder_bloc_template/presentation/views/home/home_page.dart';
 import 'package:builder_bloc_template/presentation/widgets/forms/check_box.dart';
 import 'package:builder_bloc_template/presentation/widgets/forms/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:logger/logger.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -31,6 +34,8 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _pwdController = TextEditingController();
+  String? _email;
+  String? _password;
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   late final AnimationController _animationController;
@@ -38,6 +43,7 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
   late final Animation<Offset> _animationOffset;
   late final Animation<Offset> _animRegisOffset;
   bool _isRemember = false;
+  final logger = Logger();
 
   @override
   void initState() {
@@ -80,16 +86,25 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
   @override
   void dispose() {
     _animationController.dispose();
+    _animRegisController.dispose();
     _emailController.dispose();
     _pwdController.dispose();
     super.dispose();
   }
 
   Future _doLogin() async {
-    if(_formKey.currentState!.validate()) {
+    logger.d("email $_email");
+    logger.d("pwd $_password");
+    if(_email != null || _password != null) {
       context.read<AuthBloc>().add(
         SigninSubmitted(email: _emailController.text, password: _pwdController.text)
       );
+    } else {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          const SnackBar(content: Text("Field harus diisi"))
+        );
     }
   }
 
@@ -101,12 +116,17 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
       key: _scaffoldKey,
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
+          logger.d("state $state");
           if(state is SigninFailure) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(content: Text(state.error.message))
               );
+          }
+
+          if(state is SigninSuccess) {
+            sl<AppRouter>().push(HomePage());
           }
         },
         builder: (context, state) {
@@ -125,7 +145,7 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
             child: Stack(
               children: [
                 Positioned(
-                  top: MediaQuery.paddingOf(context).top,
+                  top: MediaQuery.paddingOf(context).top + 20,
                   left: 0,
                   right: 0,
                   child: _buildRegisterContent()
@@ -204,7 +224,7 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
               alignment: Alignment.center,
               child: Card(
                 color: Colors.white38,
-                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
+                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
                 child: SizedBox(
                   width: size.width - 40,
                   height: size.height * .75
@@ -216,10 +236,15 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
               child: Card(
                 margin: EdgeInsets.zero,
                 color: Colors.white,
-                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(25))),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25),
+                  )
+                ),
                 child: SizedBox(
                   width: size.width,
-                  height: size.height * .738,
+                  height: size.height * .74,
                   child: _buildFormLogin(state)
                 ),
               ),
@@ -244,7 +269,7 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
               children: [
                 Text("Welcome Back",
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                    
+                    fontWeight: FontWeight.w700
                   ),
                 ),
                 const Text("Welcome back, please enter your credential account.",
@@ -255,12 +280,18 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
             const SizedBox(height: 20),
             CustomTFField(
               controller: _emailController,
+              onChanged: (value) {
+                _email = value;
+              },
               hintText: "Email",
             ),
             const SizedBox(height: 16),
             CustomTFField(
               controller: _pwdController,
               hintText: "Password",
+              onChanged: (value) {
+                _password = value;
+              },
               obscureText: true,
             ),
             const SizedBox(height: 10),
@@ -323,11 +354,9 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
       child: ElevatedButton(
         onPressed: _doLogin,
         child: state is SigninLoading
-          ? const SizedBox.square(
-            dimension: 26,
-            child: CircularProgressIndicator(
-              color: Colors.white
-            ),
+          ? const SpinKitThreeInOut(
+            size: 24,
+            color: Colors.white
           ) : const Text("Sign In")
       ),
     );
@@ -341,13 +370,13 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
           style: IconButton.styleFrom(
             backgroundColor: Theme.of(context).colorScheme.primary,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(12),
             elevation: 16,
             shadowColor: Colors.black
           ),
           onPressed: () {},
           icon: Image.asset("assets/images/google.png",
-            width: 48,
+            width: 32,
           )
         )
       ],

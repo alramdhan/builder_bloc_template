@@ -20,13 +20,13 @@ class AuthDatasourceImpl extends AuthDatasource {
       if(user != null) {
         return UserModel.fromFirebaseUser(user);
       } else {
-        throw ServerException();
+        throw ServerException(Exception('User tidak ditemukan'));
       }
     } on FirebaseAuthException catch(e) {
       print("emsg ${e.message}");
-      throw ServerException();
+      throw ServerException(Exception(e));
     } catch(e) {
-      throw ServerException();
+      throw ServerException(Exception(e));
     }
   }
   
@@ -38,13 +38,13 @@ class AuthDatasourceImpl extends AuthDatasource {
       if(user != null) {
         return UserModel.fromFirebaseUser(user);
       } else {
-        throw ServerException();
+        throw ServerException(Exception('User tidak ditemukan'));
       }
     } on FirebaseAuthException catch(e) {
       print("emsg ${e.message}");
-      throw ServerException();
+      throw ServerException(e);
     } catch(e) {
-      throw ServerException();
+      throw ServerException(Exception(e));
     }
   }
 }

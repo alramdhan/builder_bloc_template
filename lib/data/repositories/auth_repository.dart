@@ -15,8 +15,9 @@ class AuthRepositoryImpl extends AuthRepository {
       final userModel = await authDatasource.login(email, password);
 
       return SuccessResponse(userModel);
-    } on ServerException {
-      return const FailureResponse(statusCode: 500, message: "Error");
+    } on ServerException catch(e) {
+      print("e $e");
+      return const FailureResponse(statusCode: 500, message: "Unknown Error");
     }
   }
   

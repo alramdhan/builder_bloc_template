@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 12),
             backgroundColor: AppColor.primary400,
             foregroundColor: AppColor.light,
+            elevation: 5,
             textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: AppColor.light,
               fontWeight: FontWeight.w700,

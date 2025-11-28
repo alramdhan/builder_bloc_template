@@ -5,8 +5,8 @@ class AppColor {
   static const Color primary100 = Color(0xFFE6F0EF);
   static const Color primary400 = Color(0xFF70B2B2);
   static const Color primary900 = Color(0xFF000B0A);
-  static const Color secondary = Color(0xFFFFA4A4);
-  static const Color tertiary = Color(0xFF016B2C);
+  static const Color secondary = Color(0xFFFFB300);
+  static const Color tertiary = Color(0xFF0288D1);
 
   static const Color success = Color(0xFF26DE81);
   static const Color danger = Color(0xFFBF092F);

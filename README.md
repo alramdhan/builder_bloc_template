@@ -16,6 +16,7 @@ dart run change_app_package_name:main com.new.package.name
 ```
 
 **this project using a firebase, configure flutter project with your firebase project**
+[check this for setup firebase](https://firebase.google.com/docs/flutter/setup?platform=android)
 
 A few resources to get you started if this is your first Flutter project:
 

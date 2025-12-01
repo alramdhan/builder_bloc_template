@@ -1,6 +1,8 @@
 import 'package:builder_bloc_template/core/config/error/exception.dart';
+import 'package:builder_bloc_template/core/di/service_locator.dart';
 import 'package:builder_bloc_template/data/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:logger/logger.dart';
 
 abstract class AuthDatasource {
   Future<UserModel> login(String email, String password);
@@ -20,13 +22,15 @@ class AuthDatasourceImpl extends AuthDatasource {
       if(user != null) {
         return UserModel.fromFirebaseUser(user);
       } else {
-        throw ServerException(Exception('User tidak ditemukan'));
+        throw ServerException('User tidak ditemukan');
       }
     } on FirebaseAuthException catch(e) {
-      print("emsg ${e.message}");
-      throw ServerException(Exception(e));
+      sl<Logger>().d("message ${e.message}");
+      String handleFirebaseExc = ServerException.handleFirebaseException(e.code);
+      throw ServerException(handleFirebaseExc);
     } catch(e) {
-      throw ServerException(Exception(e));
+      sl<Logger>().d("catch ${e.toString()}");
+      throw ServerException(e.toString());
     }
   }
   
@@ -38,13 +42,15 @@ class AuthDatasourceImpl extends AuthDatasource {
       if(user != null) {
         return UserModel.fromFirebaseUser(user);
       } else {
-        throw ServerException(Exception('User tidak ditemukan'));
+        throw ServerException('User tidak ditemukan');
       }
     } on FirebaseAuthException catch(e) {
-      print("emsg ${e.message}");
-      throw ServerException(e);
+      sl<Logger>().d("message ${e.message}");
+      final String handleFirebaseExc = ServerException.handleFirebaseException(e.code);
+      throw ServerException(handleFirebaseExc);
     } catch(e) {
-      throw ServerException(Exception(e));
+      sl<Logger>().d("catch ${e.toString()}");
+      throw ServerException(e.toString());
     }
   }
 }

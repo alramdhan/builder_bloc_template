@@ -2,7 +2,6 @@ import 'package:builder_bloc_template/core/config/router/app_router.dart';
 import 'package:builder_bloc_template/core/constants/app_color.dart';
 import 'package:builder_bloc_template/core/di/service_locator.dart';
 import 'package:builder_bloc_template/core/themes/app_theme.dart';
-import 'package:builder_bloc_template/firebase_options.dart';
 import 'package:builder_bloc_template/presentation/views/auth/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,7 @@ import 'package:flutter/material.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
+    // options: DefaultFirebaseOptions.currentPlatform
   );
   serviceLocatorSetup();
   runApp(const MyApp());

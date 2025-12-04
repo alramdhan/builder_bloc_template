@@ -10,7 +10,7 @@ class CustomCBWidget extends StatefulWidget {
   });
 
   final String text;
-  final void Function(bool?)? onChanged;
+  final void Function()? onChanged;
   final bool value;
 
   @override
@@ -25,14 +25,22 @@ class _CustomCBWidgetState extends State<CustomCBWidget> {
       children: [
         GestureDetector(
           onTap: () {
-            widget.onChanged!(!widget.value);
+            widget.onChanged!();
           },
           child: Text(widget.text)
         ),
         Checkbox(
           value: widget.value,
-          checkColor: AppColor.secondary,
-          onChanged: widget.onChanged
+          checkColor: AppColor.tertiary,
+          activeColor: AppColor.secondary,
+          side: const BorderSide(color: AppColor.tertiary),
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(color: AppColor.tertiary),
+            borderRadius: BorderRadius.circular(4)
+          ),
+          onChanged: (value) {
+            widget.onChanged!();
+          }
         ),
       ],
     );

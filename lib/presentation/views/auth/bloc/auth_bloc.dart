@@ -7,6 +7,14 @@ import 'package:equatable/equatable.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
+class RememberMeBloc extends Bloc<ToggleRememberMe, RememberMeState> {
+  RememberMeBloc() : super(const RememberMeState()) {
+    on<ToggleRememberMe>((event, emit) {
+      emit(state.copyWith(isChecked: !state.isChecked));
+    });
+  }
+}
+
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthUseCase useCase;
   AuthBloc({required this.useCase}) : super(SigninInitial()) {

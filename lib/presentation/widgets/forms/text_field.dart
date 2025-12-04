@@ -47,45 +47,37 @@ class _CustomTFFieldState extends State<CustomTFField> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        border: _focusNode.hasFocus
-          ? Border.all(width: 0.8, color: Theme.of(context).colorScheme.primary)
-          : null,
-        color: AppColor.primary100,
-        borderRadius: const BorderRadius.all(Radius.circular(50))
-      ),
-      duration: const Duration(milliseconds: 100),
-      child: TextFormField(
-        controller: widget.controller,
-        focusNode: _focusNode,
-        onTapOutside: (e) {
-          FocusScope.of(context).unfocus();
-        },
-        onFieldSubmitted: widget.onFieldSubmitted,
-        onChanged: widget.onChanged,
-        // validator: (value) {
-        //   if(value == null || value.isEmpty) {
-        //     return "";
-        //   }
-
-        //   return null;
-        // },
-        // autovalidateMode: AutovalidateMode.onUserInteraction,
-        obscureText: _obscureText,
-        cursorColor: Theme.of(context).colorScheme.tertiary,
-        decoration: InputDecoration(
-          hintText: widget.hintText,
-          suffixIcon: widget.obscureText ? IconButton(
-            onPressed: () {
-              setState(() {
-                _obscureText = !_obscureText;
-              });
-            },
-            icon: Icon(_obscureText ? Icons.visibility : Icons.visibility_off)
-          ) : null,
-        ),
+    return TextFormField(
+      controller: widget.controller,
+      focusNode: _focusNode,
+      onTapOutside: (e) {
+        FocusScope.of(context).unfocus();
+      },
+      onFieldSubmitted: widget.onFieldSubmitted,
+      onChanged: widget.onChanged,
+      validator: (value) {
+        if(value == null || value.isEmpty) {
+          return "${widget.hintText} tidak boleh kosong";
+        }
+    
+        return null;
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      obscureText: _obscureText,
+      cursorColor: Theme.of(context).colorScheme.tertiary,
+      decoration: InputDecoration(
+        hintText: widget.hintText,
+        suffixIcon: widget.obscureText ? IconButton(
+          onPressed: () {
+            setState(() {
+              _obscureText = !_obscureText;
+            });
+          },
+          icon: Icon(
+            _obscureText ? Icons.visibility : Icons.visibility_off,
+            color: AppColor.primary,
+          )
+        ) : null,
       ),
     );
   }

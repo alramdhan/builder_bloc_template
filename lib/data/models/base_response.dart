@@ -22,7 +22,7 @@ class FailureResponse<T> extends BaseResponse<T> {
 
   factory FailureResponse.fromJson(Map<String, dynamic> json) {
     return FailureResponse(
-      message: json['message'] ?? 'Terjadi kesalahan',
+      message: json['message'] ?? 'Terjadi kesalahan. Harap periksa jaringan internet Anda.',
       statusCode: json['statusCode']
     );
   }

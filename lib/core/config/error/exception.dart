@@ -13,7 +13,7 @@ class ServerException {
         errorMessage = 'Alamat email ini sudah terdaftar.';
         break;
       default:
-        errorMessage = 'Terjadi kesalahan';
+        errorMessage = 'Terjadi kesalahan. Harap periksa jaringan internet Anda.';
         break;
     }
 

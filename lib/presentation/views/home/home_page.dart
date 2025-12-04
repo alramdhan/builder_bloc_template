@@ -1,5 +1,5 @@
 import 'package:builder_bloc_template/core/config/router.dart';
-import 'package:builder_bloc_template/domain/entities/produk.dart';
+import 'package:builder_bloc_template/presentation/widgets/home/product_card.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:builder_bloc_template/presentation/views/auth/login_page.dart';
 import 'package:builder_bloc_template/presentation/views/home/bloc/produk/produk_bloc.dart';
@@ -106,9 +106,9 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSpacing: 4,
                     crossAxisSpacing: 4,
                     childAspectRatio: 4/5,
-                    children: List.generate(10, (index) => Skeletonizer(
+                    children: List.generate(10, (index) => const Skeletonizer(
                       enabled: true,
-                      child: _buildProductCard(null),
+                      child: ProductCard(produk: null),
                     ))
                   );
                 }
@@ -128,49 +128,13 @@ class _HomePageState extends State<HomePage> {
                     itemCount: state.produks.length,
                     itemBuilder: (_, index) {
                       final row = state.produks[index];
-                      return _buildProductCard(row);
+                      return ProductCard(produk: row);
                     }
                   );
                 }
 
                 return const SizedBox();
               }
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProductCard(Produk? produk) {
-    return Card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: produk != null
-              ? Image.network(
-                produk.image,
-                fit: BoxFit.cover,
-              ) : Container(color: Colors.grey.shade200)
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  produk?.title ?? 'Loading Name',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  produk?.price ?? '\$0.00',
-                  style: TextStyle(color: Colors.grey[600]),
-                ),
-              ],
             ),
           )
         ],

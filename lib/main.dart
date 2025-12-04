@@ -2,14 +2,15 @@ import 'package:builder_bloc_template/core/config/router/app_router.dart';
 import 'package:builder_bloc_template/core/constants/app_color.dart';
 import 'package:builder_bloc_template/core/di/service_locator.dart';
 import 'package:builder_bloc_template/core/themes/app_theme.dart';
-import 'package:builder_bloc_template/presentation/views/auth/login_page.dart';
+import 'package:builder_bloc_template/firebase_options.dart';
+import 'package:builder_bloc_template/presentation/views/splashscreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    // options: DefaultFirebaseOptions.currentPlatform
+    options: DefaultFirebaseOptions.currentPlatform
   );
   serviceLocatorSetup();
   runApp(const MyApp());
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 12),
             backgroundColor: AppColor.primary400,
             foregroundColor: AppColor.light,
+            disabledForegroundColor: AppColor.primary,
             elevation: 5,
             textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: AppColor.light,
@@ -46,14 +48,34 @@ class MyApp extends StatelessWidget {
           contentPadding: const EdgeInsets.symmetric(horizontal: 14),
           border: const OutlineInputBorder(borderSide: BorderSide.none),
           hintStyle: TextStyle(color: Colors.blueGrey.shade300),
-          filled: false,
+          filled: true,
+          fillColor: AppColor.primary100,
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.grey),
+            borderRadius: BorderRadius.circular(30)
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: AppColor.danger),
+            borderRadius: BorderRadius.circular(30)
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: AppColor.danger),
+            borderRadius: BorderRadius.circular(30)
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              width: 2,
+              color: AppColor.tertiary
+            ),
+            borderRadius: BorderRadius.circular(30)
+          )
         )
       ),
       darkTheme: ThemeData(fontFamily: fontFamily).copyWith(
         brightness: Brightness.dark,
         colorScheme: AppTheme.darkColorScheme,
       ),
-      home: const LoginPage(),
+      home: const SplashPage(),
     );
   }
 }

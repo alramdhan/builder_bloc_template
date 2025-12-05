@@ -18,9 +18,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _fAuth = FirebaseAuth.instance;
+  late final FirebaseAuth _fAuth;
   DateTime? _lastPressedBack;
   bool _allowPop = false;
+
+  @override
+  void initState() {
+    _fAuth = sl<FirebaseAuth>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,14 +63,14 @@ class _HomePageState extends State<HomePage> {
             title: const Text("AppName"),
             backgroundColor: AppColor.light,
             surfaceTintColor: AppColor.light,
-            elevation: 6,
+            elevation: 8,
             actions: [
               IconButton(
                 onPressed: () {},
                 icon: const Icon(Icons.sunny)
               )
             ],
-            shadowColor: AppColor.dark,
+            shadowColor: AppColor.dark.withAlpha(125),
           ),
           drawer: _buildDrawerApp(),
           body: _buildListProduks()
@@ -75,17 +81,27 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildDrawerApp() {
     return Drawer(
-      child: TextButton(
-        onPressed: () {
-          _fAuth.signOut();
-          sl<AppRouter>().pushReplacement(const LoginPage());
-        },
-        child: const Text("Keluar"),
+      child: ListView(
+        children: [
+          DrawerHeader(
+            decoration: const BoxDecoration(color: AppColor.primary400),
+            child: Text("Drawer Header ${_fAuth.currentUser?.displayName ?? "-"}"),
+          ),
+          ListTile(
+            onTap: () async {
+              await _fAuth.signOut();
+              sl<AppRouter>().pushReplacement(const LoginPage());
+            },
+            trailing: const Icon(Icons.exit_to_app),
+            title: const Text("Keluar")
+          )
+        ],
       ),
     );
   }
 
   Widget _buildListProduks() {
+    // const String viewType = "com.aal.flutter.builder_bloc_template/custom_view";
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -96,6 +112,10 @@ class _HomePageState extends State<HomePage> {
               fontWeight: FontWeight.w700
             )
           ),
+          // SizedBox(
+          //   height: 50,
+          //   child: const AndroidView(viewType: viewType)
+          // ),
           const SizedBox(height: 15),
           Expanded(
             child: BlocBuilder<ProdukBloc, ProdukState>(
@@ -112,11 +132,11 @@ class _HomePageState extends State<HomePage> {
                     ))
                   );
                 }
-
+      
                 if(state is ProdukError) {
-                  return Text("abcd default");
+                  return Text("abcd default ${state.message}");
                 }
-
+      
                 if(state is ProdukLoaded) {
                   return GridView.builder(
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -132,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                     }
                   );
                 }
-
+      
                 return const SizedBox();
               }
             ),

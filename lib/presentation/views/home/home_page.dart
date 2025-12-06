@@ -1,4 +1,5 @@
 import 'package:builder_bloc_template/core/config/router.dart';
+import 'package:builder_bloc_template/presentation/views/home/bloc/cart/cart_bloc.dart';
 import 'package:builder_bloc_template/presentation/widgets/home/product_card.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:builder_bloc_template/presentation/views/auth/login_page.dart';
@@ -30,8 +31,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<ProdukBloc>()..add(GetProduksEvent()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => sl<ProdukBloc>()..add(GetProduksEvent())),
+        BlocProvider(create: (_) => sl<CartBloc>()..add(LoadCart())),
+      ],
       child: PopScope(
         canPop: _allowPop,
         onPopInvokedWithResult: (didPop, result) async {
@@ -68,6 +72,22 @@ class _HomePageState extends State<HomePage> {
               IconButton(
                 onPressed: () {},
                 icon: const Icon(Icons.sunny)
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: BlocBuilder<CartBloc, CartState>(
+                  builder: (context, state) {
+                    int shoppingCart = 0;
+                    if(state is CartLoaded) {
+                      shoppingCart = state.cart!.products.length;
+                    }
+                    return Badge.count(
+                      count: shoppingCart,
+                      isLabelVisible: shoppingCart > 0,
+                      child: const Icon(Icons.shopping_cart)
+                    );
+                  }
+                )
               )
             ],
             shadowColor: AppColor.dark.withAlpha(125),

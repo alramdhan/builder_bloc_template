@@ -11,6 +11,28 @@ class DetailProdukPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Detail Produk"),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Hero(
+            tag: "image_produk_${produk.id}",
+            child: SizedBox(
+              width: 250,
+              height: 400,
+              child: Image.network(
+                produk.image,
+                fit: BoxFit.cover,
+              ),
+            )
+          ),
+          Text(produk.title)
+        ],
+      ),
+    );
   }
 }

@@ -9,8 +9,10 @@ import 'package:builder_bloc_template/data/repositories/produk_repository.dart';
 import 'package:builder_bloc_template/domain/repositories/auth_repository.dart';
 import 'package:builder_bloc_template/domain/repositories/produk_repository.dart';
 import 'package:builder_bloc_template/domain/usecases/auth_usecase.dart';
+import 'package:builder_bloc_template/domain/usecases/get_cart_usecase.dart';
 import 'package:builder_bloc_template/domain/usecases/get_products_usecase.dart';
 import 'package:builder_bloc_template/presentation/views/auth/bloc/auth_bloc.dart';
+import 'package:builder_bloc_template/presentation/views/home/bloc/cart/cart_bloc.dart';
 import 'package:builder_bloc_template/presentation/views/home/bloc/produk/produk_bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -62,4 +64,7 @@ void serviceLocatorSetup() {
   sl.registerLazySingleton<ProdukRepository>(() => ProdukRepositoryImpl(sl()));
   sl.registerLazySingleton(() => GetProductsUsecase(produkRepository: sl()));
   sl.registerLazySingleton<ProdukDatasource>(() => ProdukDatasourceImpl(sl()));
+  //cart
+  sl.registerFactory(() => CartBloc(sl()));
+  sl.registerLazySingleton(() => GetCartUsecase(produkRepository: sl()));
 }

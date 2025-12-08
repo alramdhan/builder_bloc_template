@@ -29,10 +29,9 @@ class ProdukDatasourceImpl implements ProdukDatasource {
   @override
   Future<BaseResponse<CartModel>> fetchCart() async {
     final response = await _apiService.get(ApiConfig.getCartPath);
-    print("res $response");
     if(response.statusCode == 200) {
-      final Map<String, dynamic> data = response.data;
-      return SuccessResponse(CartModel.fromJson(data));
+      final List data = response.data;
+      return SuccessResponse(CartModel.fromJson(data[0]));
     } else {
       throw Exception("failed to fetch produk");
     }

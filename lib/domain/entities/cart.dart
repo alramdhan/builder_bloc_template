@@ -1,4 +1,4 @@
-import 'package:builder_bloc_template/domain/entities/produk.dart';
+import 'package:builder_bloc_template/data/models/cart_model.dart';
 import 'package:equatable/equatable.dart';
 
 class Cart extends Equatable {

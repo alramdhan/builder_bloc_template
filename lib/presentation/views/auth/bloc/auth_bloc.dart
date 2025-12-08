@@ -51,7 +51,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } else {
       // emit(SignupFailure(result));
     }
-    print("res ${result}");
     emit(SignupInitial());
   }
 }

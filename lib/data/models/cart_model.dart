@@ -1,4 +1,3 @@
-import 'package:builder_bloc_template/data/models/produk_model.dart';
 import 'package:builder_bloc_template/domain/entities/cart.dart';
 
 class CartModel extends Cart {
@@ -7,6 +6,21 @@ class CartModel extends Cart {
   factory CartModel.fromJson(Map<String, dynamic> json) => CartModel(
     id: json['id'],
     userId: json['userId'],
-    products: List.from(json['products'].map((e) => ProdukModel.fromJson(e)))
+    products: List.from(json['products'].map((e) => Produk.fromJson(e)))
+  );
+}
+
+class Produk {
+  final int productId;
+  final int quantity;
+
+  const Produk({
+    required this.productId,
+    required this.quantity
+  });
+
+  factory Produk.fromJson(Map<String, dynamic> json) => Produk(
+    productId: json['productId'],
+    quantity: json['quantity']
   );
 }

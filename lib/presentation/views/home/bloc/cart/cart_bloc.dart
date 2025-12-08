@@ -19,6 +19,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         final cart = await getCartUsecase();
         emit(CartLoaded(cart.response));
       } catch(e) {
+        sl<Logger>().d(e);
         sl<Logger>().e("Terjadi kesalahan");
       }
     });

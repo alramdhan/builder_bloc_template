@@ -56,7 +56,6 @@ class _RegisterViewState extends State<RegisterView> {
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
-          print("state ${state}");
           if(state is FailureResponse) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()

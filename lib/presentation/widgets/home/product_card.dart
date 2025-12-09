@@ -1,4 +1,5 @@
 import 'package:builder_bloc_template/core/config/router.dart';
+import 'package:builder_bloc_template/core/constants/app_color.dart';
 import 'package:builder_bloc_template/core/di/service_locator.dart';
 import 'package:builder_bloc_template/domain/entities/produk.dart';
 import 'package:builder_bloc_template/presentation/views/home/detail_produk_page.dart';
@@ -15,6 +16,8 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 4,
+      shadowColor: AppColor.dark.withAlpha(60),
       child: InkWell(
         onTap: produk != null ? () => sl<AppRouter>().push(DetailProdukPage(produk: produk!)) : null,
         child: Column(

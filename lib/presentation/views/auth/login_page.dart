@@ -4,6 +4,7 @@ import 'package:builder_bloc_template/core/config/router.dart';
 import 'package:builder_bloc_template/core/constants/app_color.dart';
 import 'package:builder_bloc_template/core/di/service_locator.dart';
 import 'package:builder_bloc_template/presentation/views/auth/bloc/auth_bloc.dart';
+import 'package:builder_bloc_template/presentation/views/auth/cubit/rememberme_cubit.dart';
 import 'package:builder_bloc_template/presentation/views/auth/register_page.dart';
 import 'package:builder_bloc_template/presentation/views/home/home_page.dart';
 import 'package:builder_bloc_template/presentation/widgets/forms/check_box.dart';
@@ -23,7 +24,7 @@ class LoginPage extends StatelessWidget {
         BlocProvider(
           create: (_) => sl<AuthBloc>(),
         ),
-        BlocProvider(create: (_) => RememberMeBloc()),
+        BlocProvider(create: (_) => sl<RemembermeCubit>()),
       ],
       // create: (_) => sl<AuthBloc>(),
       child: const LoginView(),
@@ -310,14 +311,14 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
   }
 
   Widget _buildRememberMe() {
-    return BlocBuilder<RememberMeBloc, RememberMeState>(
-      builder: (context, state) {
+    return BlocBuilder<RemembermeCubit, bool>(
+      builder: (context, isChecked) {
         return CustomCBWidget(
           text: "Ingat Saya",
           onChanged: () {
-            context.read<RememberMeBloc>().add(ToggleRememberMe());
+            context.read<RemembermeCubit>().toggleRememberMe(!isChecked);
           },
-          value: state.isChecked,
+          value: isChecked,
         );
       }
     );

@@ -26,5 +26,3 @@ class SignupSubmitted extends AuthEvent {
   @override
   List<Object?> get props => [email, password];
 }
-
-class ToggleRememberMe extends AuthEvent {}

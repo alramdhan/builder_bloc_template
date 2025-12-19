@@ -285,12 +285,12 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
             const SizedBox(height: 10),
             _buildRememberMe(),
             const SizedBox(height: 10),
-            _buildButtonLogin(state),
+            _buildButtonLogin(isLoading: state is SigninLoading),
             const SizedBox(height: 32),
-            Row(
+            const Row(
               children: [
                 line,
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text("atau masuk dengan",
                     style: TextStyle(color: Colors.blueGrey),
@@ -335,12 +335,12 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
     // );
   }
 
-  Widget _buildButtonLogin(AuthState state) {
+  Widget _buildButtonLogin({required bool isLoading}) {
     return SizedBox(
       width: MediaQuery.sizeOf(context).width,
       child: ElevatedButton(
-        onPressed: state is SigninLoading ? null : _doLogin,
-        child: state is SigninLoading
+        onPressed: isLoading ? null : _doLogin,
+        child: isLoading
           ? const SpinKitThreeInOut(
             size: 26,
             color: AppColor.primary

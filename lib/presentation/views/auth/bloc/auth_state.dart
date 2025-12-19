@@ -52,16 +52,3 @@ class SignupFailure extends AuthState {
   @override
   List<Object?> get props => [error];
 }
-
-class RememberMeState extends AuthState {
-  final bool isChecked;
-
-  const RememberMeState({this.isChecked = false});
-
-  RememberMeState copyWith({bool? isChecked}) {
-    return RememberMeState(isChecked: isChecked ?? this.isChecked);
-  }
-
-  @override
-  List<Object?> get props => [isChecked];
-}

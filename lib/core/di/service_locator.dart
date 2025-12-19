@@ -14,6 +14,7 @@ import 'package:builder_bloc_template/domain/usecases/get_products_usecase.dart'
 import 'package:builder_bloc_template/presentation/views/auth/bloc/auth_bloc.dart';
 import 'package:builder_bloc_template/presentation/views/home/bloc/cart/cart_bloc.dart';
 import 'package:builder_bloc_template/presentation/views/home/bloc/produk/produk_bloc.dart';
+import 'package:builder_bloc_template/presentation/views/home/cubit/menutab_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
@@ -51,6 +52,8 @@ void serviceLocatorSetup() {
     return dio;
   });
   sl.registerLazySingleton(() => ApiService(sl()));
+
+  sl.registerLazySingleton(() => MenutabCubit());
 
   sl.registerLazySingleton(() => AppRouter());
   sl.registerLazySingleton(() => FirebaseAuth.instance);

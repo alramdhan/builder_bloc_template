@@ -5,7 +5,7 @@ import 'package:builder_bloc_template/core/constants/app_color.dart';
 import 'package:builder_bloc_template/core/di/service_locator.dart';
 import 'package:builder_bloc_template/presentation/views/auth/bloc/auth_bloc.dart';
 import 'package:builder_bloc_template/presentation/views/auth/register_page.dart';
-import 'package:builder_bloc_template/presentation/views/home/home_page.dart';
+import 'package:builder_bloc_template/presentation/views/home/menu_tab.dart';
 import 'package:builder_bloc_template/presentation/widgets/forms/check_box.dart';
 import 'package:builder_bloc_template/presentation/widgets/forms/text_field.dart';
 import 'package:flutter/material.dart';
@@ -123,7 +123,7 @@ class _LoginViewState extends State<LoginView> with TickerProviderStateMixin {
           }
 
           if(state is SigninSuccess) {
-            sl<AppRouter>().pushReplacement(const HomePage());
+            sl<AppRouter>().pushReplacement(const MainMenuTab());
           }
         },
         builder: (context, state) {

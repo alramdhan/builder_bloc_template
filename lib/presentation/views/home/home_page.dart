@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage> {
     final size = MediaQuery.sizeOf(context);
     final titleTextStyle = Theme.of(context).textTheme.titleMedium
       ?.copyWith(fontWeight: FontWeight.w700);
-    // const String viewType = "com.aal.flutter.builder_bloc_template/custom_view";
+    // const String viewType = "com.aal.flutter.builder_bloc_template/senyumku_widget";
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -184,9 +184,9 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(height: 15),
           Text("Produk", style: titleTextStyle),
-          // SizedBox(
-          //   height: 50,
-          //   child: const AndroidView(viewType: viewType)
+          // const SizedBox(
+          //   height: 140,
+          //   child: AndroidView(viewType: viewType)
           // ),
           const SizedBox(height: 10),
           BlocBuilder<ProdukBloc, ProdukState>(
@@ -198,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisSpacing: 4,
                   childAspectRatio: 4/5,
                   physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
+                  shrinkWrap: true, 
                   children: List.generate(10, (index) => const Skeletonizer(
                     enabled: true,
                     child: ProductCard(produk: null),
